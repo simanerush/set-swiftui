@@ -67,6 +67,37 @@ struct Game {
             
         }
         
+        // я гений
+        for i in cards.indices {
+            if i % 3 == 0 {
+                cards[i].count = 1
+                cards[i].pattern = Game.Patterns.plain
+                cards[i + 1].pattern = Game.Patterns.plain
+                cards[i + 2].pattern = Game.Patterns.plain
+            }
+            if i % 3 == 1 {
+                cards[i].count = 2
+                cards[i].pattern = Game.Patterns.stripes
+                if i < 80 {
+                    cards[i + 1].pattern = Game.Patterns.stripes
+                }
+                if i < 79 {
+                    cards[i + 2].pattern = Game.Patterns.stripes
+                }
+            }
+            if i % 3 == 2 {
+                cards[i].count = 3
+                cards[i].pattern = Game.Patterns.filled
+                if i < 80 {
+                    cards[i + 1].pattern = Game.Patterns.filled
+                }
+                if i < 79 {
+                    cards[i + 2].pattern = Game.Patterns.filled
+                }
+                
+            }
+        }
+        
         var countRed = 0
         var countGreen = 0
         var countPurple = 0
