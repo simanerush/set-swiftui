@@ -83,6 +83,7 @@ struct Game {
         
         var i = 0
         while i < cards.count - 8 {
+            cards[i].pattern = Patterns.plain
             cards[i + 1].pattern = Patterns.plain
             cards[i + 2].pattern = Patterns.plain
             cards[i + 3].pattern = Patterns.stripes
@@ -92,13 +93,10 @@ struct Game {
             cards[i + 7].pattern = Patterns.filled
             cards[i + 8].pattern = Patterns.filled
             
-            i += 8
+            i += 9
         }
         
-        for card in cards {
-            print(card.pattern)
-        }
-        
+        // cards.shuffle()
     }
     
     struct Card: Identifiable {
