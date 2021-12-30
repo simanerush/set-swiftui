@@ -89,6 +89,8 @@
 			dependencies = (
 			);
 			name = SetGame;
+			packageProductDependencies = (
+			);
 			productName = SetGame;
 			productReference = 231B9515277BEAD6004D12F2 /* SetGame.app */;
 			productType = "com.apple.product-type.application";
@@ -117,6 +119,8 @@
 				Base,
 			);
 			mainGroup = 231B950C277BEAD6004D12F2;
+			packageReferences = (
+			);
 			productRefGroup = 231B9516277BEAD6004D12F2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Game {
     
@@ -71,52 +72,32 @@ struct Game {
         for i in cards.indices {
             if i % 3 == 0 {
                 cards[i].count = 1
-                cards[i].pattern = Game.Patterns.plain
-                cards[i + 1].pattern = Game.Patterns.plain
-                cards[i + 2].pattern = Game.Patterns.plain
             }
             if i % 3 == 1 {
                 cards[i].count = 2
-                cards[i].pattern = Game.Patterns.stripes
-                if i < 80 {
-                    cards[i + 1].pattern = Game.Patterns.stripes
-                }
-                if i < 79 {
-                    cards[i + 2].pattern = Game.Patterns.stripes
-                }
             }
             if i % 3 == 2 {
                 cards[i].count = 3
-                cards[i].pattern = Game.Patterns.filled
-                if i < 80 {
-                    cards[i + 1].pattern = Game.Patterns.filled
-                }
-                if i < 79 {
-                    cards[i + 2].pattern = Game.Patterns.filled
-                }
-                
             }
         }
         
-        var countRed = 0
-        var countGreen = 0
-        var countPurple = 0
+        var i = 0
+        while i < cards.count - 8 {
+            cards[i + 1].pattern = Patterns.plain
+            cards[i + 2].pattern = Patterns.plain
+            cards[i + 3].pattern = Patterns.stripes
+            cards[i + 4].pattern = Patterns.stripes
+            cards[i + 5].pattern = Patterns.stripes
+            cards[i + 6].pattern = Patterns.filled
+            cards[i + 7].pattern = Patterns.filled
+            cards[i + 8].pattern = Patterns.filled
+            
+            i += 8
+        }
+        
         for card in cards {
-            if card.color == Game.Colors.green {
-                countGreen += 1
-            }
-            if card.color == Game.Colors.purple {
-                countPurple += 1
-            }
-            if card.color == Game.Colors.red {
-                countRed += 1
-            }
+            print(card.pattern)
         }
-        
-        print("red: \(countRed)")
-        print("green: \(countGreen)")
-        print("purple: \(countPurple)")
-        print(cards)
         
     }
     

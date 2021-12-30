@@ -16,7 +16,7 @@ struct SetGameView: View {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
                 ForEach(game.cards) { card in
                     CardView(card: card)
-                    .aspectRatio(3/2, contentMode: .fit)
+                        .aspectRatio(3/2, contentMode: .fit)
                 }
             }
         }
@@ -34,30 +34,60 @@ struct CardView: View {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 
-                // TODO: Fill does not work
                 if card.count == 2 {
                     if card.pattern == Game.Patterns.filled {
                         HStack {
-                            Image(systemName: enumToSystem[card.shape]! as! String + "fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
                             Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                        }
+                    } else if card.pattern == Game.Patterns.stripes {
+                        HStack {
+                            Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
                         }
                     } else {
                         HStack {
-                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
                             Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
                         }
                     }
                     
                 } else if card.count == 3 {
-                    HStack {
-                        Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
-                        Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
-                        Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                    if card.pattern == Game.Patterns.filled {
+                        HStack {
+                            Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                        }
+                    } else if card.pattern == Game.Patterns.stripes {
+                        HStack {
+                            Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
+                        }
+                    } else {
+                        HStack {
+                            Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                        }
                     }
                 } else {
-                    Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                    if card.pattern == Game.Patterns.filled {
+                        
+                        Image(systemName: enumToSystem[card.shape]! as! String + ".fill").foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                        
+                    } else if card.pattern == Game.Patterns.stripes {
+                        
+                        Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color).opacity(0.5)
+                        
+                    } else {
+                        
+                        Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                        
+                    }
                 }
-            
+                
             } else if card.isMatched {
                 shape.opacity(0)
             } else {
@@ -93,5 +123,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = SetGame()
         return SetGameView(game: game)
+.previewInterfaceOrientation(.portrait)
     }
 }
