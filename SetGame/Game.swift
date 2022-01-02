@@ -12,8 +12,20 @@ struct Game {
     
     private(set) var cards: Array<Card>
     
+    var addMoreCards: Bool
+    
+    private(set) var numberOfCardsToBeAdded: Int
+    
+    private var countOfMatches: Int
+    
     init() {
         cards = []
+        
+        addMoreCards = false
+        
+        countOfMatches = 0
+        
+        numberOfCardsToBeAdded = 12
         
         indicesOfChosenCards = [Int]()
         
@@ -99,7 +111,7 @@ struct Game {
             i += 9
         }
         
-        // cards.shuffle()
+        cards.shuffle()
     }
     
     // Three chosen cards are a set if:
@@ -114,16 +126,15 @@ struct Game {
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }), !cards[chosenIndex].isFaceUp {
             
             if indicesOfChosenCards.count == 3 {
-                print("3 chosen cards")
                 if cards[indicesOfChosenCards[0]].shape == cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[2]].shape == cards[indicesOfChosenCards[1]].shape || cards[indicesOfChosenCards[0]].shape != cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[2]].shape != cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[0]].count == cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[2]].count == cards[indicesOfChosenCards[1]].count || cards[indicesOfChosenCards[0]].count != cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[2]].count != cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[0]].pattern == cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[2]].pattern == cards[indicesOfChosenCards[1]].pattern || cards[indicesOfChosenCards[0]].pattern != cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[2]].pattern != cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[0]].color == cards[indicesOfChosenCards[1]].color && cards[indicesOfChosenCards[2]].color == cards[indicesOfChosenCards[1]].color || cards[indicesOfChosenCards[0]].color != cards[indicesOfChosenCards[1]].color && cards[indicesOfChosenCards[2]].color != cards[indicesOfChosenCards[1]].color {
                     
-                    print("match")
                     cards[indicesOfChosenCards[2]].isMatched = true
                     cards[indicesOfChosenCards[0]].isMatched = true
                     cards[indicesOfChosenCards[1]].isMatched = true
+                    
+                    countOfMatches += 1
                     indicesOfChosenCards = []
                 } else {
-                    print("not match")
                     for index in indicesOfChosenCards {
                         cards[index].isFaceUp = false
                         indicesOfChosenCards = []
@@ -135,6 +146,16 @@ struct Game {
                 indicesOfChosenCards.append(chosenIndex)
             }
             cards[chosenIndex].isFaceUp = true
+            
+            if countOfMatches >= 3 {
+                addMoreCards = true
+                if numberOfCardsToBeAdded >= 72 {
+                    numberOfCardsToBeAdded = 80
+                } else {
+                    numberOfCardsToBeAdded += 12
+                }
+                countOfMatches = 0
+            }
         }
     }
     

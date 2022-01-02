@@ -14,7 +14,6 @@ struct SetGameView: View {
     var body: some View {
         AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
             if card.isMatched && card.isFaceUp {
-                let _ = print("here")
                 Rectangle().opacity(0)
             } else {
                 CardView(card: card)

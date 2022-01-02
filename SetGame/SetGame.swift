@@ -16,7 +16,12 @@ class SetGame: ObservableObject {
     @Published private var model: Game = createSetGame()
     
     var cards: Array<Game.Card> {
-        return model.cards
+        if model.addMoreCards {
+            model.addMoreCards = false
+            return Array(model.cards[0...model.numberOfCardsToBeAdded])
+        }
+        
+        return Array(model.cards[0...model.numberOfCardsToBeAdded])
     }
     
     func choose(_ card: Game.Card) {
