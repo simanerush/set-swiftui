@@ -18,4 +18,8 @@ class SetGame: ObservableObject {
     var cards: Array<Game.Card> {
         return model.cards
     }
+    
+    func choose(_ card: Game.Card) {
+        model.choose(card)
+    }
 }

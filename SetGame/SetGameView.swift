@@ -12,14 +12,22 @@ struct SetGameView: View {
     @ObservedObject var game: SetGame
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
-                ForEach(game.cards) { card in
-                    CardView(card: card)
-                        .aspectRatio(3/2, contentMode: .fit)
-                }
+        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+            if card.isMatched && !card.isFaceUp {
+                Rectangle().opacity(0)
+            } else {
+                CardView(card: card)
+                    .padding(4)
+                    .aspectRatio(2/3, contentMode: .fit)
+                    .onTapGesture {
+                        game.choose(card)
+                        print(game.cards)
+                    }
             }
         }
+        
+        .foregroundColor(.red)
+        .padding(.horizontal)
     }
 }
 
@@ -68,7 +76,7 @@ struct CardView: View {
                     } else {
                         HStack {
                             Image(systemName: enumToSystem[card.shape]! as! String ).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
-                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
+                            Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color) 
                             Image(systemName: enumToSystem[card.shape]! as! String).foregroundColor(enumToSystem[card.color]! as? SwiftUI.Color)
                         }
                     }

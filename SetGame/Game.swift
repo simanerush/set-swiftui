@@ -99,12 +99,48 @@ struct Game {
         // cards.shuffle()
     }
     
+    // Three chosen cards are a set if:
+    // 1. They have the same count or three different counts.
+    // 2. They have the same shape or have three different shapes.
+    // 3. They have the same pattern or three different patterns.
+    // 4. They all have the same color or three different colors.
+    
+    private var indicesOfChosenCards: [Int] {
+        get {
+             cards.indices.filter( { cards[$0].isFaceUp })
+        }
+        set {}
+    }
+    
+    mutating func choose(_ card: Card) {
+        if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }), !cards[chosenIndex].isFaceUp {
+            if indicesOfChosenCards.count != 2 {
+                indicesOfChosenCards.append(chosenIndex)
+            } else {
+                if cards[chosenIndex].shape == cards[indicesOfChosenCards[0]].shape && cards[chosenIndex].shape == cards[indicesOfChosenCards[1]].shape {
+                    cards[chosenIndex].isMatched = true
+                    cards[indicesOfChosenCards[0]].isMatched = true
+                    cards[indicesOfChosenCards[1]].isMatched = true
+                    cards[chosenIndex].isFaceUp = false
+                    cards[indicesOfChosenCards[0]].isFaceUp = false
+                    cards[indicesOfChosenCards[1]].isFaceUp = false
+                    indicesOfChosenCards = []
+                } else {
+                    cards[chosenIndex].isFaceUp = false
+                    cards[indicesOfChosenCards[0]].isFaceUp = false
+                    cards[indicesOfChosenCards[1]].isFaceUp = false
+                }
+            }
+            cards[chosenIndex].isFaceUp = true
+        }
+    }
+    
     struct Card: Identifiable {
         var color: Colors
         var shape: Shapes
         var pattern: Patterns
         var count: Int
-        var isFaceUp = true
+        var isFaceUp = false
         var isMatched = false
         let id: Int
     }
