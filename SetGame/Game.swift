@@ -14,6 +14,9 @@ struct Game {
     
     init() {
         cards = []
+        
+        indicesOfChosenCards = [Int]()
+        
         for i in 1...81 {
             cards.append(Card(color: Colors.red, shape: Shapes.diamond, pattern: Patterns.plain, count: 1, id: i))
         }
@@ -105,30 +108,21 @@ struct Game {
     // 3. They have the same pattern or three different patterns.
     // 4. They all have the same color or three different colors.
     
-    private var indicesOfChosenCards: [Int] {
-        get {
-             cards.indices.filter( { cards[$0].isFaceUp })
-        }
-        set {}
-    }
+    private var indicesOfChosenCards: [Int]
     
     mutating func choose(_ card: Card) {
+        print(indicesOfChosenCards)
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }), !cards[chosenIndex].isFaceUp {
             if indicesOfChosenCards.count != 2 {
                 indicesOfChosenCards.append(chosenIndex)
+                print("appended \(chosenIndex)")
             } else {
                 if cards[chosenIndex].shape == cards[indicesOfChosenCards[0]].shape && cards[chosenIndex].shape == cards[indicesOfChosenCards[1]].shape {
                     cards[chosenIndex].isMatched = true
                     cards[indicesOfChosenCards[0]].isMatched = true
                     cards[indicesOfChosenCards[1]].isMatched = true
-                    cards[chosenIndex].isFaceUp = false
-                    cards[indicesOfChosenCards[0]].isFaceUp = false
-                    cards[indicesOfChosenCards[1]].isFaceUp = false
                     indicesOfChosenCards = []
-                } else {
-                    cards[chosenIndex].isFaceUp = false
-                    cards[indicesOfChosenCards[0]].isFaceUp = false
-                    cards[indicesOfChosenCards[1]].isFaceUp = false
+                    print("match!")
                 }
             }
             cards[chosenIndex].isFaceUp = true
