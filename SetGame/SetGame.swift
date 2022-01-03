@@ -15,6 +15,10 @@ class SetGame: ObservableObject {
     
     @Published private var model: Game = createSetGame()
     
+    var gameIsFinished: Bool {
+        return model.gameIsFinished
+    }
+    
     var cards: Array<Game.Card> {
         if model.addMoreCards {
             model.addMoreCards = false
@@ -31,4 +35,5 @@ class SetGame: ObservableObject {
     func startNewGame() {
         model = SetGame.createSetGame()
     }
+    
 }

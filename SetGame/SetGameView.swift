@@ -11,16 +11,16 @@ struct SetGameView: View {
     
     @ObservedObject var game: SetGame
     
-    @State private var showingAlert = false
+    @State private var showingButtonAlert = false
     
     var body: some View {
         VStack {
             HStack {
                 Button("Rules") {
-                    showingAlert = true
+                    showingButtonAlert = true
                     
                 }
-                .alert(isPresented: $showingAlert) {
+                .alert(isPresented: $showingButtonAlert) {
                     Alert(title: Text("Rules of Set"), message: Text("You have to choose 3 cards. They are a set if:  \n1. They have the same count or three different counts. \n2. They have the same shape or have three different shapes. \n3. They have the same pattern or three different patterns. \n4. They all have the same color or three different colors."), dismissButton: .cancel())
                 }
                 Spacer()
@@ -47,6 +47,7 @@ struct SetGameView: View {
             
             .foregroundColor(.red)
             .padding(.horizontal)
+            
         }
             
     }

@@ -16,12 +16,20 @@ struct Game {
     
     private(set) var numberOfCardsToBeAdded: Int
     
+    private var matchesToAddMoreCards: Int
+    
     private var countOfMatches: Int
+    
+    private(set) var gameIsFinished: Bool
     
     init() {
         cards = []
         
         addMoreCards = false
+        
+        gameIsFinished = false
+        
+        matchesToAddMoreCards = 0
         
         countOfMatches = 0
         
@@ -123,8 +131,10 @@ struct Game {
     private var indicesOfChosenCards: [Int]
     
     mutating func choose(_ card: Card) {
+        if countOfMatches >= 26 {
+            gameIsFinished = true 
+        }
         if let chosenIndex = cards.firstIndex(where: { $0.id == card.id }), !cards[chosenIndex].isFaceUp {
-            
             if indicesOfChosenCards.count == 3 {
                 if cards[indicesOfChosenCards[0]].shape == cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[2]].shape == cards[indicesOfChosenCards[1]].shape || cards[indicesOfChosenCards[0]].shape != cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[2]].shape != cards[indicesOfChosenCards[1]].shape && cards[indicesOfChosenCards[0]].count == cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[2]].count == cards[indicesOfChosenCards[1]].count || cards[indicesOfChosenCards[0]].count != cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[2]].count != cards[indicesOfChosenCards[1]].count && cards[indicesOfChosenCards[0]].pattern == cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[2]].pattern == cards[indicesOfChosenCards[1]].pattern || cards[indicesOfChosenCards[0]].pattern != cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[2]].pattern != cards[indicesOfChosenCards[1]].pattern && cards[indicesOfChosenCards[0]].color == cards[indicesOfChosenCards[1]].color && cards[indicesOfChosenCards[2]].color == cards[indicesOfChosenCards[1]].color || cards[indicesOfChosenCards[0]].color != cards[indicesOfChosenCards[1]].color && cards[indicesOfChosenCards[2]].color != cards[indicesOfChosenCards[1]].color {
                     
@@ -132,6 +142,7 @@ struct Game {
                     cards[indicesOfChosenCards[0]].isMatched = true
                     cards[indicesOfChosenCards[1]].isMatched = true
                     
+                    matchesToAddMoreCards += 1
                     countOfMatches += 1
                     indicesOfChosenCards = []
                 } else {
@@ -147,14 +158,14 @@ struct Game {
             }
             cards[chosenIndex].isFaceUp = true
             
-            if countOfMatches >= 3 {
+            if matchesToAddMoreCards >= 3 {
                 addMoreCards = true
                 if numberOfCardsToBeAdded >= 72 {
                     numberOfCardsToBeAdded = 80
                 } else {
                     numberOfCardsToBeAdded += 12
                 }
-                countOfMatches = 0
+                matchesToAddMoreCards = 0
             }
         }
     }
