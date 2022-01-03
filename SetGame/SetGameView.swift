@@ -11,22 +11,44 @@ struct SetGameView: View {
     
     @ObservedObject var game: SetGame
     
+    @State private var showingAlert = false
+    
     var body: some View {
-        AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-            if card.isMatched && card.isFaceUp {
-                Rectangle().opacity(0)
-            } else {
-                CardView(card: card)
-                    .padding(4)
-                    .aspectRatio(2/3, contentMode: .fit)
-                    .onTapGesture {
-                        game.choose(card)
-                    }
+        VStack {
+            HStack {
+                Button("Rules") {
+                    showingAlert = true
+                    
+                }
+                .alert(isPresented: $showingAlert) {
+                    Alert(title: Text("Rules of Set"), message: Text("You have to choose 3 cards. They are a set if:  \n1. They have the same count or three different counts. \n2. They have the same shape or have three different shapes. \n3. They have the same pattern or three different patterns. \n4. They all have the same color or three different colors."), dismissButton: .cancel())
+                }
+                Spacer()
+                Button("New Game") {
+                    game.startNewGame()
+                }
+                
             }
+            .padding()
+    
+            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
+                if card.isMatched && card.isFaceUp {
+                    Rectangle().opacity(0)
+                } else {
+                    CardView(card: card)
+                        .padding(4)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .onTapGesture {
+                            game.choose(card)
+                        }
+                }
+            }
+            
+            
+            .foregroundColor(.red)
+            .padding(.horizontal)
         }
-        
-        .foregroundColor(.red)
-        .padding(.horizontal)
+            
     }
 }
 

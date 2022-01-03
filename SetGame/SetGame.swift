@@ -27,4 +27,8 @@ class SetGame: ObservableObject {
     func choose(_ card: Game.Card) {
         model.choose(card)
     }
+    
+    func startNewGame() {
+        model = SetGame.createSetGame()
+    }
 }
