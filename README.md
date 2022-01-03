@@ -9,5 +9,5 @@ A one-player Set game developed using SwiftUI.
 
 Have fun! 
 
-![Screenshot 1. Gameplay](/Users/sima/Downloads/1.png)
-![Screenshot 2. Gameplay](/Users/sima/Downloads/2.png)
+![Screenshot 1. Gameplay](https://user-images.githubusercontent.com/51447912/147900010-4a5043f2-7e40-4c3b-b537-816af50a0b01.png)
+![Screenshot 2. Gameplay](https://user-images.githubusercontent.com/51447912/147900012-2f3dab79-c2c8-46df-a905-cde721dd2233.png)
