@@ -9,5 +9,8 @@ A one-player Set game developed using SwiftUI.
 
 Have fun! 
 
-![Screenshot 1. Gameplay](https://user-images.githubusercontent.com/51447912/147900407-106dbd0e-f202-40eb-bd9f-cc0d0fe04bfe.png)
-![Screenshot 2. Gameplay](https://user-images.githubusercontent.com/51447912/147900409-10204ff7-90c4-41fa-b4a9-3c1c5eebb39b.png)
+![image](https://user-images.githubusercontent.com/51447912/148505262-f8bd2ddb-d214-403a-80ef-2ab047303170.png)
+![image](https://user-images.githubusercontent.com/51447912/148505302-e6fd7dcd-8379-46ed-aa78-f412e1d17984.png)
+![image](https://user-images.githubusercontent.com/51447912/148505331-ae7723eb-8e93-4bc5-bd58-323d81e8fb52.png)
+
+
