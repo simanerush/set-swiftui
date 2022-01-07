@@ -45,6 +45,7 @@ struct SetGameView: View {
     var newGameButton: some View {
         Button("New Game") {
             dealt = []
+            matched = []
             game.startNewGame()
         }
     }
@@ -108,23 +109,19 @@ struct SetGameView: View {
                             .padding(4)
                             .aspectRatio(2/3, contentMode: .fit)
                             .onTapGesture {
-                                for card in game.cards {
-                                    withAnimation(dealAnimation(for: card)) {
-                                        match(card)
-                                        
-                                    }
-                                }
                                 game.choose(card)
+                                withAnimation {
+                                    match(card)
+                                }
                             }
                     }
                 }
+                
             }
+            .foregroundColor(.red)
+            .padding(.horizontal)
         }
         
-        
-        
-        .foregroundColor(.red)
-        .padding(.horizontal)
     }
     
     var discardBody: some View {
@@ -132,7 +129,7 @@ struct SetGameView: View {
             ForEach(game.allCards.filter(isMatched)) { card in
                 CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
+                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .identity))
                     .zIndex(zIndex(of: card))
             }
         }
