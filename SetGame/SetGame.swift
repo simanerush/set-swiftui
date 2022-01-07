@@ -28,6 +28,10 @@ class SetGame: ObservableObject {
         return Array(model.cards[0...model.numberOfCardsToBeAdded])
     }
     
+    var allCards: Array<Game.Card> {
+        return model.cards
+    }
+    
     func choose(_ card: Game.Card) {
         model.choose(card)
     }

@@ -15,34 +15,52 @@ struct SetGameView: View {
     
     @Namespace private var dealingNamespace
     
+    @Namespace private var discardingNamespace
+    
     var body: some View {
         ZStack {
             VStack {
                 HStack {
-                    Button("Rules") {
-                        showingButtonAlert = true
-                        
-                    }
-                    .alert(isPresented: $showingButtonAlert) {
-                        Alert(title: Text("Rules of Set"), message: Text("You have to choose 3 cards. They are a set if:  \n1. They have the same count or three different counts. \n2. They have the same shape or have three different shapes. \n3. They have the same pattern or three different patterns. \n4. They all have the same color or three different colors."), dismissButton: .cancel())
-                    }
+                    rulesButton
                     Spacer()
-                    Button("New Game") {
-                        game.startNewGame()
-                    }
+                    newGameButton
                     
                 }
                 .padding()
                 
                 gameBody
-                deckBody
+                HStack {
+                    discardBody
+                    Spacer()
+                    deckBody
+                }
+                .padding()
+                
             }
         }
         
             
     }
     
+    var newGameButton: some View {
+        Button("New Game") {
+            dealt = []
+            game.startNewGame()
+        }
+    }
+    
+    var rulesButton: some View {
+        Button("Rules") {
+            showingButtonAlert = true
+            
+        }
+        .alert(isPresented: $showingButtonAlert) {
+            Alert(title: Text("Rules of Set"), message: Text("You have to choose 3 cards. They are a set if:  \n1. They have the same count or three different counts. \n2. They have the same shape or have three different shapes. \n3. They have the same pattern or three different patterns. \n4. They all have the same color or three different colors."), dismissButton: .cancel())
+        }
+    }
+    
     @State private var dealt = Set<Int>()
+    @State private var matched = Set<Int>()
     
     private func deal(_ card: Game.Card) {
         dealt.insert(card.id)
@@ -51,6 +69,19 @@ struct SetGameView: View {
     private func isUndealt(_ card: Game.Card) -> Bool {
         !dealt.contains(card.id)
     }
+    
+    private func match(_ card: Game.Card) {
+        for card in game.cards {
+            if card.isMatched {
+                matched.insert(card.id)
+            }
+        }
+    }
+    
+    private func isMatched(_ card: Game.Card) -> Bool {
+        matched.contains(card.id)
+    }
+    
     
     private func dealAnimation(for card: Game.Card) -> Animation {
         var delay = 0.0
@@ -66,20 +97,26 @@ struct SetGameView: View {
     
     var gameBody: some View {
         GeometryReader { geometry in
-            AspectVGrid(items: game.cards, aspectRatio: 2/3) { card in
-                if card.isMatched && card.isFaceUp {
-                    Rectangle().opacity(0)
-                } else {
-                    CardView(card: card)
-                        .matchedGeometryEffect(id: card.id, in: dealingNamespace)
-                        .padding(4)
-                        .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale))
-                        .zIndex(zIndex(of: card))
-                        .padding(4)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .onTapGesture {
-                            game.choose(card)
-                        }
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
+                ForEach(game.cards) { card in
+                    if !(isUndealt(card) || (card.isMatched && card.isFaceUp)) {
+                        CardView(card: card)
+                            .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                            .padding(4)
+                            .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale))
+                            .zIndex(zIndex(of: card))
+                            .padding(4)
+                            .aspectRatio(2/3, contentMode: .fit)
+                            .onTapGesture {
+                                for card in game.cards {
+                                    withAnimation(dealAnimation(for: card)) {
+                                        match(card)
+                                        
+                                    }
+                                }
+                                game.choose(card)
+                            }
+                    }
                 }
             }
         }
@@ -90,9 +127,22 @@ struct SetGameView: View {
         .padding(.horizontal)
     }
     
+    var discardBody: some View {
+        ZStack {
+            ForEach(game.allCards.filter(isMatched)) { card in
+                CardView(card: card)
+                    .matchedGeometryEffect(id: card.id, in: dealingNamespace)
+                    .transition(AnyTransition.asymmetric(insertion: .scale, removal: .opacity))
+                    .zIndex(zIndex(of: card))
+            }
+        }
+        .frame(width: CardConstants.undealtWidth, height: CardConstants.undealtHeight)
+        .foregroundColor(CardConstants.color)
+    }
+    
     var deckBody: some View {
         ZStack {
-            ForEach(game.cards.filter(isUndealt)) { card in
+            ForEach(game.allCards.filter(isUndealt)) { card in
                 CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
@@ -106,6 +156,8 @@ struct SetGameView: View {
             for card in game.cards {
                 withAnimation(dealAnimation(for: card)) {
                     deal(card)
+                    deal(game.allCards.first(where: { $0.id == card.id})!)
+                    
                 }
             }
         }
@@ -128,7 +180,7 @@ struct CardView: View {
     var body: some View {
         ZStack {
             let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
-            if card.isFaceUp {
+            if card.isFaceUp  || card.isMatched {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
                 
@@ -186,8 +238,6 @@ struct CardView: View {
                     }
                 }
                 
-            } else if card.isMatched {
-                shape.opacity(0)
             } else {
                 shape.fill()
             }
