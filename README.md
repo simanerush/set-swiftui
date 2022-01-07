@@ -3,9 +3,10 @@ A one-player Set game developed using SwiftUI.
 
 ## Features
 
-* Initially the deck consists of 12 cards. The amount of cards increases as there are more mathces.
-* The New Game button allows to start a new game of Set.
+* To draw cards, tap on the red deck underneath. As the number of cards in game decreases, you can draw more cards from the deck.
+* As cards get matched, they go to another deck, which makes the game more user-friendly.
 * The Rules button features the rules of the game.
+* You can easily start new game by pressing the New Game button.
 
 Have fun! 
 
